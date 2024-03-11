@@ -1,0 +1,2 @@
+adresse Gyroscope MPU6050 : 0x68  
+adresse Magnetometre LIS2 MDL : 0x1E 
