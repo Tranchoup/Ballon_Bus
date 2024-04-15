@@ -2,7 +2,7 @@
 #include "WSEN_TIDS.h"
 #include "WSEN_HIDS.h"
 #include "WSEN_ISDS.h"
-#include "WSEN_PADS.h"
+//#include "WSEN_PADS.h"
 
 #include <OneWire.h>
 #include <SPI.h>
@@ -22,8 +22,8 @@ void lecture_HIDS_humidity_wurth();
 void setup_ISDS_inertial_unit_wurth();
 void lecture_ISDS_inertial_unit_wurth();
 
-void setup_PADS_pressure_wurth();
-void lecture_PADS_pressure_wurth();
+// void setup_PADS_pressure_wurth();
+// void lecture_PADS_pressure_wurth();
 
 void lecture_pression_analogique();
 void readDS18B20();
@@ -48,10 +48,10 @@ int status_TIDS;
 Sensor_ISDS sensor_ISDS;
 int status_ISDS;
 
-Sensor_PADS sensor_PADS;
-int status_PADS;
-PADS_state_t stateTemperature;
-PADS_state_t statePressure;
+// Sensor_PADS sensor_PADS;
+// int status_PADS;
+// PADS_state_t stateTemperature;
+// PADS_state_t statePressure;
 
 int pin_pressur_sensor = A1;
 double pressur_volt = 0;
@@ -61,39 +61,12 @@ double pressur_analog = 0;
 
 OneWire  ds(7);  
 
-int ID_Temperature_WURTH = 650;
-int ID_Temperature_WURTH_HUMIDITY_SENSOR  = 651;
-int ID_Temperature_WURTH_PRESSURE_SENSOR = 652;
-int ID_Temperature_WURTH_INERTIAL_SENSOR = 653;
-int ID_Temperature_MPU=654;
-int ID_Temperature_DS18B20 = 655;
-int ID_Geiger = 656;
-int ID_Pressure_WURTH = 657;
-int ID_Pressure = 658;
-int ID_Humidity_WURTH = 659 ;
-int ID_Magnetic_X = 660;
-int ID_Magnetic_Y = 661;
-int ID_Magnetic_Z = 662;
-int ID_WURTH_acceleration_X =  663;
-int ID_WURTH_acceleration_Y =  664;
-int ID_WURTH_acceleration_Z =  665;
-int ID_WURTH_gyro_X = 666;
-int ID_WURTH_gyro_Y = 667;
-int ID_WURTH_gyro_Z = 668;
-int ID_MPU_acceleration_X =  669;
-int ID_MPU_acceleration_Y =  670;
-int ID_MPU_acceleration_Z =  671;
-int ID_MPU_gyro_X = 672;
-int ID_MPU_gyro_Y = 673;
-int ID_MPU_gyro_Z = 674;
-
 void setup()
 {
   Serial.begin(9600);
-  Serial1.begin(9600);
   setup_TIDS_temp_wurth();
   setup_ISDS_inertial_unit_wurth();
-  setup_PADS_pressure_wurth();
+  //setup_PADS_pressure_wurth();
   //setup_HIDS_humidity_temp_wurth(); NE FONCTIONNE PAS
    setupSD();
   setupMPU();
@@ -124,7 +97,7 @@ void loop()
     lecture_ISDS_inertial_unit_wurth();
     myFile.println(" ");
     delay(100);
-    lecture_PADS_pressure_wurth();
+    //lecture_PADS_pressure_wurth();
     myFile.println(" ");
     delay(100);
     readDS18B20();
@@ -292,19 +265,12 @@ void lecture_ISDS_inertial_unit_wurth()
   {
     myFile.println("Error:  get_accelerations(). Stop!");
   }
-
     myFile.println("Acceleration along X,Y,Z axis in [mg]: ");
-    Serial1.println(ID_WURTH_acceleration_X);
     myFile.print(acc_X);
-    Serial1.println(acc_X);
     myFile.print(" ");
-    Serial1.println(ID_WURTH_acceleration_Y);
     myFile.print(acc_Y);
-    Serial1.println(acc_Y);
     myFile.print(" ");
-    Serial1.println(ID_WURTH_acceleration_Z);
     myFile.print(acc_Z);
-    Serial1.println(acc_Z);
     myFile.println(" ");
 #endif
   }
@@ -357,16 +323,10 @@ void lecture_ISDS_inertial_unit_wurth()
     myFile.println("Error:  get_angular_rates(). Stop!");
   }
     myFile.println("Angular rate in X,Y,Z axis in [mdps]: ");
-    Serial1.println(ID_WURTH_gyro_X);
-    Serial1.println(gyro_X);
     myFile.print(gyro_X);
     myFile.print(" ");
-    Serial1.println(ID_WURTH_gyro_Y);
-    Serial1.println(gyro_Y);
     myFile.print(gyro_Y);
     myFile.print(" ");
-    Serial1.println(ID_WURTH_gyro_Z);
-    Serial1.println(gyro_Z);
     myFile.print(gyro_Z);
     myFile.println(" ");
 #endif
@@ -400,65 +360,62 @@ void lecture_ISDS_inertial_unit_wurth()
   }
 }
 
-void setup_PADS_pressure_wurth()
-{
-    // Initialize the I2C interface
-}
-void lecture_PADS_pressure_wurth()
-{
-    sensor_PADS.init(PADS_ADDRESS_I2C_1);
+// void setup_PADS_pressure_wurth()
+// {
+//     // Initialize the I2C interface
+// }
+// void lecture_PADS_pressure_wurth()
+// {
+//     sensor_PADS.init(PADS_ADDRESS_I2C_1);
 
-    myFile.println("Lecture de PADS");
-    // Set single conversion mode
-  if (WE_FAIL == sensor_PADS.set_single_conversion())
-  {
-    Serial.print("Error: set_single_conversion(). STOP!");
-  }
+//     myFile.println("Lecture de PADS");
+//     // Set single conversion mode
+//   if (WE_FAIL == sensor_PADS.set_single_conversion())
+//   {
+//     Serial.print("Error: set_single_conversion(). STOP!");
+//   }
 
-  status_PADS = sensor_PADS.ready_to_read(&stateTemperature, &statePressure);
-  if (WE_FAIL == status_PADS)
-  {
-    myFile.print("Error: Sensor DRDY temperature not readable.");
-  }
-  else if (0 == stateTemperature)
-  {
-   myFile.print("Error: temperature DRDY = 0.");
-  }
-  else
-  {
+//   status_PADS = sensor_PADS.ready_to_read(&stateTemperature, &statePressure);
+//   if (WE_FAIL == status_PADS)
+//   {
+//     myFile.print("Error: Sensor DRDY temperature not readable.");
+//   }
+//   else if (0 == stateTemperature)
+//   {
+//    myFile.print("Error: temperature DRDY = 0.");
+//   }
+//   else
+//   {
   
-    // Read and calculate the temperature
-    float temperature;
-    sensor_PADS.read_temperature(&temperature);
-    Serial1.println(ID_Temperature_WURTH_HUMIDITY_SENSOR);
-    Serial1.println(temperature);
-    myFile.print("temperature: ");
+//     // Read and calculate the temperature
+//     float temperature;
+//     sensor_PADS.read_temperature(&temperature);
   
-    // Print the temperature on the serial monitor
-    myFile.print(temperature);
-    myFile.println(" degC");
+//     myFile.print("temperature: ");
   
-  }
+//     // Print the temperature on the serial monitor
+//     myFile.print(temperature);
+//     myFile.println(" degC");
+  
+//   }
 
-  if (0 == statePressure)
-  {
-    Serial.print("Error: pressure DRDY = 0.");
-  }
-  else
-  {
-    // Read and calculate the pressure
-    float pressure;
-    sensor_PADS.read_pressure(&pressure);
-
-    Serial1.println(ID_Pressure_WURTH);
-    Serial1.println(pressure);
-    myFile.print("pressure: ");
+//   if (0 == statePressure)
+//   {
+//     Serial.print("Error: pressure DRDY = 0.");
+//   }
+//   else
+//   {
+//     // Read and calculate the pressure
+//     float pressure;
+//     sensor_PADS.read_pressure(&pressure);
   
-    // Print the pressure on the serial monitor
-    myFile.print(pressure);
-    myFile.println(" kPa");
-  }
-}
+//     myFile.print("pressure: ");
+  
+//     // Print the pressure on the serial monitor
+//     myFile.print(pressure);
+//     myFile.println(" kPa");
+//   }
+// }
 
 void setup_TIDS_temp_wurth()
 {
@@ -505,9 +462,6 @@ void lecture_TIDS_temp_wurth()
     myFile.print("The temperature is: ");
     myFile.print(myTemperature_TIDS);
     myFile.println(" Celsius SETUP");
-
-    Serial1.println(ID_Temperature_WURTH);
-    Serial1.println(myTemperature_TIDS);
   }
   else
   {
@@ -522,10 +476,6 @@ void lecture_pression_analogique()
     myFile.println("Lecture du capteur analogique de pression");
   pressur_volt = analogRead(pin_pressur_sensor);
   pressur_analog = ((((pressur_volt/1024)*5)-0.10*V_supply)/(0.8*V_supply))*P_max;
-  
-  Serial1.println(ID_Pressure);
-  Serial1.println(pressur_analog);
-
   myFile.println("Pression en Pa");
   myFile.println(pressur_analog);
 }
@@ -568,42 +518,22 @@ void readMPU( ) { /* function readMPU */
  	/* Print out the values */
   myFile.print("MPU : \n");
  	myFile.print("Acceleration X: ");
- 	myFile.print(a.acceleration.x);  
-  Serial1.println(ID_MPU_acceleration_X);
-  Serial1.println(a.acceleration.x);
-
+ 	myFile.print(a.acceleration.x);
  	myFile.print(", Y: ");
  	myFile.print(a.acceleration.y);
-  Serial1.println(ID_MPU_acceleration_Y);
-  Serial1.println(a.acceleration.y);
-
  	myFile.print(", Z: ");
  	myFile.print(a.acceleration.z);
-  Serial1.println(ID_MPU_acceleration_Z);
-  Serial1.println(a.acceleration.z);
-
  	myFile.println(" m/s^2");
  	myFile.print("Rotation X: ");
  	myFile.print(g.gyro.x);
-  Serial1.println(ID_MPU_gyro_X);
-  Serial1.println(g.gyro.x);
-
  	myFile.print(", Y: ");
  	myFile.print(g.gyro.y);
-  Serial1.println(ID_MPU_gyro_Y);
-  Serial1.println(g.gyro.y);
-
  	myFile.print(", Z: ");
  	myFile.print(g.gyro.z);
-  Serial1.println(ID_MPU_gyro_Z);
-  Serial1.println(g.gyro.z);
-
  	myFile.println(" rad/s");
  	myFile.print("Temperature: ");
  	myFile.print(temp.temperature);
  	myFile.println("C");
-  Serial1.println(ID_Temperature_MPU);
-  Serial1.println(temp.temperature);
 }
 
 
@@ -634,22 +564,12 @@ void readMagneto(){
     lis2mdl.getEvent(&event);
     myFile.print("X: ");
     myFile.print(event.magnetic.x);
-    Serial1.println(ID_Magnetic_X);
-    Serial1.println(event.magnetic.x);
-
-
     myFile.print("  ");
     myFile.print("Y: ");
     myFile.print(event.magnetic.y);
-    Serial1.println(ID_Magnetic_Y);
-    Serial1.println(event.magnetic.y);
-
     myFile.print("  ");
     myFile.print("Z: ");
     myFile.print(event.magnetic.z);
-    Serial1.println(ID_Magnetic_Z);
-    Serial1.println(event.magnetic.z);
-
     myFile.print("  ");
     myFile.println("uT");
 }
@@ -723,8 +643,5 @@ void readDS18B20()
   myFile.println("Temperature DS18B20");
   myFile.print("  Temperature = ");
   myFile.print(celsius);
-
-  Serial1.println(ID_Temperature_DS18B20);
-  Serial1.println(celsius);
   myFile.println(" Celsius, ");
 }
