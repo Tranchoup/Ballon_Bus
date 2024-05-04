@@ -4,6 +4,10 @@
 #include "WSEN_ISDS.h"
 #include "WSEN_PADS.h"
 
+#include "ArduinoPlatform.h"
+#include "WSEN_HIDS_2523020210001.h"
+//#include "WSEN_ISDS.cpp"
+
 #include <OneWire.h>
 #include <SPI.h>
 #include <SD.h>
@@ -87,6 +91,14 @@ int ID_MPU_gyro_X = 672;
 int ID_MPU_gyro_Y = 673;
 int ID_MPU_gyro_Z = 674;
 
+// variables pour le capteur de radiations 
+unsigned long rad;
+int pin_radiation = A2;
+int i = 0;
+float tension = 0.0;
+int tout_ou_rien = 0;
+
+
 void setup()
 {
   Serial.begin(9600);
@@ -108,19 +120,19 @@ void loop()
   // if the file opened okay, write to it:
   if (myFile) {
     Serial.print("Ecriture");
-
-    readMPU();
-    myFile.println(" ");
-    delay(100);
-    readMagneto();
-    myFile.println(" ");
+   Serial1.println("S");
+   readMPU();
+   myFile.println(" ");
+   delay(100);
+   readMagneto();
+   myFile.println(" ");
     delay(100);
     lecture_TIDS_temp_wurth();
     myFile.println(" ");
     delay(100);
-    lecture_pression_analogique();
-    myFile.println(" ");
-    delay(100);
+   lecture_pression_analogique();
+   myFile.println(" ");
+   delay(100);
     lecture_ISDS_inertial_unit_wurth();
     myFile.println(" ");
     delay(100);
@@ -133,9 +145,11 @@ void loop()
     delay(100);
     myFile.println(millis());
     myFile.println(" --------------------------------------------------------------- ");
-    // close the file:
+    // close the file:s
     myFile.close();
     Serial.println("Ecriture Finie.");
+    Serial1.println("E");
+
   } 
   else {
     // if the file didn't open, print an error:
@@ -144,6 +158,26 @@ void loop()
 
 }
 
+void lecture_radiation()
+{
+    i =millis();
+    while(millis() - i<1000){
+
+    tout_ou_rien = analogRead(pin_radiation);
+    tension = tout_ou_rien * (5.0/1023.0);
+    if (tension <= 3.3){
+      rad += 1;
+    }
+  }
+  i=0;
+  Serial1.println(ID_Geiger);
+  Serial1.println(rad/147);
+  myFile.println("Lecture radiation");
+  myFile.println(rad);
+  rad = 0;
+
+
+}
 void setup_HIDS_humidity_temp_wurth()
 {
     // Initialize the I2C interface
@@ -551,9 +585,6 @@ void setupMPU()
  	Serial.println(F("Initialize System"));
  if (!mpu.begin(0x68)) { // Change address if needed
  			Serial.println("Failed to find MPU6050 chip");
- 			while (1) {
- 					delay(10);
- 			}
  	}
  	mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
  	mpu.setGyroRange(MPU6050_RANGE_250_DEG);

@@ -1,7 +1,7 @@
 //Rad Timer
 unsigned long duration;  //the variable to store the HIGH length of the pulse
 unsigned long rad;
-unsigned long Sv;
+
 int pin = A0;
 int i = 0;
 float tension = 0.0;
@@ -11,6 +11,11 @@ void setup()
 {
   pinMode(pin, INPUT); 
   Serial.begin(9600);  // start serial port at 9600 bps:
+}
+mem = millis();
+while (mem - millis() < 1000) ;
+{
+
 }
 
 void loop()
@@ -24,6 +29,6 @@ void loop()
     i +=1;
   }
   i=0;
-  Serial.println(rad);
+  Serial.println(rad/147);
   rad = 0;
 }
