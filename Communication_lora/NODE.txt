@@ -1,0 +1,23 @@
+Node1 : 
+ID node : 257
+ID MPU acceleration X :  650 
+ID MPU acceleration Y :  651 
+ID MPU acceleration Z :  652 
+ID temperature MPU : 653
+ID MPU gyro X = 654;
+ID MPU gyro Y = 655;
+ID MPU gyro Z = 656;
+
+Node2 : 
+ID node : 258
+ID Magnetic X : 657  
+ID Magnetic Y : 658 
+ID Magnetic Z : 659 
+ID Temp Wurth : 660  
+ID Pressure : 661  
+ID Wurth pressure : 662
+ID geiger : 663
+
+
+
+
